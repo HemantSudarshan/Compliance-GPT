@@ -6,6 +6,7 @@ Premium Streamlit interface for regulatory compliance Q&A.
 
 import streamlit as st
 import sys
+import logging
 from pathlib import Path
 
 # Add project root to path
@@ -495,7 +496,6 @@ Get free keys at:
                                     )
                                 except Exception as e:
                                     # Don't fail the query if logging fails
-                                    import logging
                                     logging.warning(f"Failed to log query: {e}")
                         else:
                             st.error("❌ Could not get response")

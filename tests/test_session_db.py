@@ -7,6 +7,7 @@ Tests session management and query history functionality.
 import pytest
 import os
 import tempfile
+import time
 from pathlib import Path
 from datetime import datetime, timezone
 
@@ -69,7 +70,6 @@ def test_update_session_activity(temp_db):
     original_activity = session.last_activity
     
     # Wait a bit and update
-    import time
     time.sleep(0.1)
     temp_db.update_session_activity(session.session_id)
     

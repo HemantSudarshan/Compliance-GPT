@@ -6,6 +6,7 @@ REST API for compliance Q&A with citations.
 
 import os
 import sys
+import logging
 from pathlib import Path
 from typing import Optional
 from fastapi import FastAPI, HTTPException
@@ -168,7 +169,6 @@ async def query_compliance(request: QueryRequest) -> QueryResponse:
                 )
             except Exception as e:
                 # Don't fail the query if logging fails
-                import logging
                 logging.warning(f"Failed to log query: {e}")
         
         return QueryResponse(
