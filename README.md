@@ -1,3 +1,12 @@
+---
+title: ComplianceGPT
+emoji: ⚖️
+colorFrom: blue
+colorTo: purple
+sdk: docker
+pinned: false
+---
+
 # ComplianceGPT ⚖️
 ### AI-Powered Regulatory Compliance Assistant with Citation-Backed Answers
 
