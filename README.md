@@ -4,6 +4,7 @@
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg)](https://fastapi.tiangolo.com/)
 [![Weaviate](https://img.shields.io/badge/Weaviate-Vector%20DB-00C9A7)](https://weaviate.io)
+[![Hugging Face](https://img.shields.io/badge/🤗%20Hugging%20Face-Open%20in%20Spaces-blue.svg)](https://huggingface.co/spaces/new?sdk=docker&template=HemantSudarshan/Compliance-GPT)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 > **🎯 Problem:** Financial companies spend $300K+/year on manual compliance research across GDPR, CCPA, and PCI-DSS regulations (200+ hours/quarter).
