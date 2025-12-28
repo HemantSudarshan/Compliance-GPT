@@ -385,7 +385,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 **Hemant Sudarshan**
 - GitHub: [@HemantSudarshan](https://github.com/HemantSudarshan)
-- LinkedIn: [Connect](https://linkedin.com/in/YOUR_PROFILE)
+- LinkedIn: [linkedin.com/in/hemant-sudarshan-01633928a](https://www.linkedin.com/in/hemant-sudarshan-01633928a)
 
 **Questions?** Open an issue or start a discussion!
 
@@ -395,6 +395,8 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 **⭐ If this project helped you, please star it!**
 
-Built with ❤️ for compliance professionals worldwide
+Made with ❤️ by [Hemant Sudarshan](https://www.linkedin.com/in/hemant-sudarshan-01633928a)
+
+*Built for compliance professionals worldwide*
 
 </div>
