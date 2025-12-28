@@ -13,6 +13,9 @@ WORKDIR $APP_HOME
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
+    poppler-utils \
+    tesseract-ocr \
+    libmagic-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
