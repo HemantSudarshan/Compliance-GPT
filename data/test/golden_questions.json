@@ -1,0 +1,93 @@
+{
+    "version": "1.0",
+    "description": "Golden questions for GDPR compliance evaluation",
+    "regulation": "GDPR",
+    "questions": [
+        {
+            "id": "gdpr_001",
+            "question": "What is the time limit for data breach notification under GDPR?",
+            "ground_truth": "Organizations must notify the supervisory authority within 72 hours after becoming aware of a personal data breach.",
+            "expected_articles": [
+                "Article 33"
+            ]
+        },
+        {
+            "id": "gdpr_002",
+            "question": "What is the right to be forgotten?",
+            "ground_truth": "The data subject has the right to obtain from the controller the erasure of personal data concerning him or her without undue delay. This is also known as the right to erasure.",
+            "expected_articles": [
+                "Article 17"
+            ]
+        },
+        {
+            "id": "gdpr_003",
+            "question": "What is the maximum fine for GDPR violations?",
+            "ground_truth": "Infringements can lead to administrative fines up to 20,000,000 EUR or 4% of total worldwide annual turnover of the preceding financial year, whichever is higher.",
+            "expected_articles": [
+                "Article 83"
+            ]
+        },
+        {
+            "id": "gdpr_004",
+            "question": "What rights do data subjects have under GDPR?",
+            "ground_truth": "Data subjects have the right to access, rectification, erasure, restriction of processing, data portability, and the right to object. They also have rights related to automated decision-making and profiling.",
+            "expected_articles": [
+                "Article 15",
+                "Article 16",
+                "Article 17",
+                "Article 18",
+                "Article 20",
+                "Article 21",
+                "Article 22"
+            ]
+        },
+        {
+            "id": "gdpr_005",
+            "question": "What is the lawful basis for processing personal data?",
+            "ground_truth": "Processing is lawful only if at least one of the following applies: consent, performance of a contract, legal obligation, vital interests, public task, or legitimate interests.",
+            "expected_articles": [
+                "Article 6"
+            ]
+        },
+        {
+            "id": "gdpr_006",
+            "question": "What are the requirements for valid consent under GDPR?",
+            "ground_truth": "Consent must be freely given, specific, informed, and unambiguous. It must be given by a clear affirmative act. The data subject shall have the right to withdraw consent at any time.",
+            "expected_articles": [
+                "Article 7"
+            ]
+        },
+        {
+            "id": "gdpr_007",
+            "question": "When is a Data Protection Officer required?",
+            "ground_truth": "A DPO is required when: the processing is carried out by a public authority, core activities require regular and systematic monitoring of data subjects on a large scale, or core activities consist of processing special categories of data on a large scale.",
+            "expected_articles": [
+                "Article 37"
+            ]
+        },
+        {
+            "id": "gdpr_008",
+            "question": "What is a Data Protection Impact Assessment (DPIA)?",
+            "ground_truth": "A DPIA is an assessment of the impact of envisaged processing operations on the protection of personal data. It is required when processing is likely to result in a high risk to the rights and freedoms of natural persons.",
+            "expected_articles": [
+                "Article 35"
+            ]
+        },
+        {
+            "id": "gdpr_009",
+            "question": "What are the principles of data processing under GDPR?",
+            "ground_truth": "Personal data must be processed lawfully, fairly and transparently; collected for specified, explicit and legitimate purposes; adequate, relevant and limited; accurate; kept for no longer than necessary; and processed securely.",
+            "expected_articles": [
+                "Article 5"
+            ]
+        },
+        {
+            "id": "gdpr_010",
+            "question": "What are special categories of personal data?",
+            "ground_truth": "Special categories include data revealing racial or ethnic origin, political opinions, religious or philosophical beliefs, trade union membership, genetic data, biometric data, data concerning health, and data concerning sex life or sexual orientation.",
+            "expected_articles": [
+                "Article 9"
+            ]
+        }
+    ]
+}

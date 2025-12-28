@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComplianceGPT - AI Regulatory Assistant</title>
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Animated Background -->
+        <div class="bg-gradient"></div>
+        <div class="bg-grid"></div>
+
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon-container">
+                    <span class="logo-icon">⚖️</span>
+                    <span class="logo-glow"></span>
+                </div>
+                <div class="logo-text">
+                    <h1>ComplianceGPT</h1>
+                    <span class="tagline">AI-Powered Regulatory Intelligence</span>
+                </div>
+            </div>
+            <div class="header-center">
+                <div class="header-badges">
+                    <span class="badge badge-gdpr">🇪🇺 GDPR</span>
+                    <span class="badge badge-ccpa">🇺🇸 CCPA</span>
+                    <span class="badge badge-pci">💳 PCI-DSS</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="header-status" id="status">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Connecting...</span>
+                </div>
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <span>Quick Actions</span>
+                    <button class="sidebar-toggle" id="sidebarToggle">◀</button>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>📚 Regulation</h3>
+                    <div class="regulation-pills">
+                        <button class="reg-pill active" data-reg="All">All</button>
+                        <button class="reg-pill" data-reg="GDPR">GDPR</button>
+                        <button class="reg-pill" data-reg="CCPA">CCPA</button>
+                        <button class="reg-pill" data-reg="PCI-DSS">PCI-DSS</button>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>🔥 Popular Questions</h3>
+                    <div class="example-questions">
+                        <button class="example-btn"
+                            data-question="What are the data breach notification requirements under GDPR?">
+                            <span class="example-icon">🔔</span>
+                            <span class="example-text">Data breach notifications</span>
+                            <span class="example-arrow">→</span>
+                        </button>
+                        <button class="example-btn" data-question="What is the right to erasure under GDPR Article 17?">
+                            <span class="example-icon">🗑️</span>
+                            <span class="example-text">Right to erasure</span>
+                            <span class="example-arrow">→</span>
+                        </button>
+                        <button class="example-btn" data-question="What rights do consumers have under CCPA?">
+                            <span class="example-icon">👤</span>
+                            <span class="example-text">CCPA consumer rights</span>
+                            <span class="example-arrow">→</span>
+                        </button>
+                        <button class="example-btn" data-question="What are the maximum penalties for GDPR violations?">
+                            <span class="example-icon">⚠️</span>
+                            <span class="example-text">GDPR penalties</span>
+                            <span class="example-arrow">→</span>
+                        </button>
+                        <button class="example-btn"
+                            data-question="When is a Data Protection Impact Assessment required?">
+                            <span class="example-icon">📊</span>
+                            <span class="example-text">DPIA requirements</span>
+                            <span class="example-arrow">→</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>🧠 Advanced Topics</h3>
+                    <div class="example-questions">
+                        <button class="example-btn"
+                            data-question="How do GDPR and CCPA differ in their approach to data subject rights?">
+                            <span class="example-icon">⚖️</span>
+                            <span class="example-text">GDPR vs CCPA comparison</span>
+                            <span class="example-arrow">→</span>
+                        </button>
+                        <button class="example-btn"
+                            data-question="What are the requirements for valid consent under GDPR Article 7?">
+                            <span class="example-icon">✅</span>
+                            <span class="example-text">Valid consent requirements</span>
+                            <span class="example-arrow">→</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="sidebar-footer">
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-value" id="chunkCount">--</span>
+                            <span class="stat-label">Documents</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="llmProvider">--</span>
+                            <span class="stat-label">AI Model</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Chat Area -->
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Welcome Message -->
+                    <div class="message message-assistant welcome-message">
+                        <div class="message-avatar">
+                            <span>⚖️</span>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-bubble glass-card">
+                                <div class="welcome-header">
+                                    <h2>Welcome to ComplianceGPT</h2>
+                                    <p class="welcome-subtitle">Your AI-powered regulatory compliance assistant</p>
+                                </div>
+                                <div class="welcome-features">
+                                    <div class="feature-item">
+                                        <span class="feature-icon">📚</span>
+                                        <span>Verified citations from official documents</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">🔍</span>
+                                        <span>Multi-regulation search (GDPR, CCPA, PCI-DSS)</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span class="feature-icon">⚡</span>
+                                        <span>Expert-level guidance for complex scenarios</span>
+                                    </div>
+                                </div>
+                                <p class="welcome-cta">Try a question below or ask anything about data privacy
+                                    regulations!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div class="chat-input-container glass-card">
+                    <div class="input-suggestions" id="inputSuggestions">
+                        <span class="suggestion-chip" data-text="What are">What are</span>
+                        <span class="suggestion-chip" data-text="How does">How does</span>
+                        <span class="suggestion-chip" data-text="Compare">Compare</span>
+                        <span class="suggestion-chip" data-text="Article">Article</span>
+                    </div>
+                    <div class="input-wrapper">
+                        <div class="input-icon">💬</div>
+                        <textarea id="questionInput" placeholder="Ask any compliance question..." rows="1"></textarea>
+                        <button id="sendBtn" class="send-btn" disabled>
+                            <span class="send-icon">↑</span>
+                        </button>
+                    </div>
+                    <div class="input-footer">
+                        <span class="input-hint">
+                            <kbd>Enter</kbd> to send • <kbd>Shift+Enter</kbd> for new line
+                        </span>
+                        <span class="powered-by">
+                            Powered by <strong>Groq</strong> + <strong>Weaviate</strong>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+
+</html>
