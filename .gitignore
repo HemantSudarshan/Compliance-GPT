@@ -45,6 +45,7 @@ logs/
 # Data (keep structure, ignore large files)
 data/raw/*.pdf
 data/processed/*.json
+data/*.db
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 

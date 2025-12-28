@@ -263,6 +263,14 @@ if "messages" not in st.session_state:
 if "citations" not in st.session_state:
     st.session_state.citations = {}
 
+# Initialize session tracking
+if "session_id" not in st.session_state:
+    from src.storage.session_db import SessionDatabase
+    db = SessionDatabase()
+    session = db.create_session(metadata={"source": "streamlit"})
+    st.session_state.session_id = session.session_id
+    st.session_state.session_db = db
+
 
 def check_configuration():
     """Check if the system is properly configured."""
@@ -348,6 +356,28 @@ with st.sidebar:
     for q in example_questions:
         if st.button(f"📌 {q[:35]}...", key=q, use_container_width=True):
             st.session_state.pending_question = q
+    
+    st.divider()
+    
+    # Query History Section
+    st.markdown('<p class="sidebar-header">📜 Query History</p>', unsafe_allow_html=True)
+    
+    if "session_db" in st.session_state and "session_id" in st.session_state:
+        history = st.session_state.session_db.get_session_history(
+            st.session_state.session_id, 
+            limit=10
+        )
+        
+        if history:
+            for record in history:
+                question_preview = record.question[:40] + "..." if len(record.question) > 40 else record.question
+                with st.expander(f"❓ {question_preview}", expanded=False):
+                    st.markdown(f"**Question:** {record.question}")
+                    st.markdown(f"**Regulation:** {record.regulation_filter or 'All'}")
+                    st.markdown(f"**Citations:** {record.num_citations}")
+                    st.markdown(f"**Time:** {record.timestamp[:19]}")
+        else:
+            st.markdown("*No queries yet*")
     
     st.divider()
     
@@ -450,6 +480,23 @@ Get free keys at:
                                         """, unsafe_allow_html=True)
                             
                             st.session_state.messages.append({"role": "assistant", "content": response_text})
+                            
+                            # Log query to session database
+                            if "session_db" in st.session_state and "session_id" in st.session_state:
+                                try:
+                                    st.session_state.session_db.log_query(
+                                        session_id=st.session_state.session_id,
+                                        question=prompt,
+                                        answer=response.answer,
+                                        regulation_filter=regulation if regulation != "All" else None,
+                                        num_citations=len(response.citations),
+                                        has_context=response.has_context,
+                                        metadata=response.metadata
+                                    )
+                                except Exception as e:
+                                    # Don't fail the query if logging fails
+                                    import logging
+                                    logging.warning(f"Failed to log query: {e}")
                         else:
                             st.error("❌ Could not get response")
                             
