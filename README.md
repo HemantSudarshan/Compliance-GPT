@@ -18,6 +18,7 @@ ComplianceGPT is a production-ready RAG (Retrieval-Augmented Generation) system 
 - 🆓 **Free LLM Options** - Works with Gemini/Groq (free tier)
 - 📄 **PDF Source Viewer** - View original regulations with highlights
 - 🔄 **Change Detection** - Track regulatory updates over time
+- 📜 **Session Tracking** - Query history and usage analytics with SQLite
 
 ## 🚀 Quick Start
 
@@ -78,6 +79,19 @@ compliancegpt/
 | Parsing | Unstructured.io | Free |
 | Frontend | Streamlit | Free |
 | Evaluation | RAGAS | Free |
+| Session Tracking | SQLite | Free |
+
+## 📜 Session Tracking
+
+ComplianceGPT includes built-in session tracking and query history:
+
+- **Automatic Session Management** - Sessions created automatically
+- **Query History** - All queries logged with full context
+- **Usage Analytics** - Track queries, citations, and performance
+- **REST API** - Session management endpoints
+- **Privacy-Focused** - Local SQLite database
+
+See [Session Tracking Documentation](docs/SESSION_TRACKING.md) for details.
 
 ## 📊 Evaluation Results
 

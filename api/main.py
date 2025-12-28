@@ -6,6 +6,7 @@ REST API for compliance Q&A with citations.
 
 import os
 import sys
+import logging
 from pathlib import Path
 from typing import Optional
 from fastapi import FastAPI, HTTPException
@@ -41,9 +42,21 @@ app.add_middleware(
 
 
 # Request/Response models
+class SessionCreateRequest(BaseModel):
+    metadata: Optional[dict] = None
+
+
+class SessionResponse(BaseModel):
+    session_id: str
+    created_at: str
+    last_activity: str
+    metadata: dict
+
+
 class QueryRequest(BaseModel):
     question: str
     regulation: Optional[str] = None
+    session_id: Optional[str] = None
 
 
 class CitationResponse(BaseModel):
@@ -60,6 +73,21 @@ class QueryResponse(BaseModel):
     has_context: bool
     provider: str
     model: str
+    session_id: Optional[str] = None
+
+
+class QueryHistoryItem(BaseModel):
+    query_id: str
+    question: str
+    answer: str
+    regulation_filter: Optional[str]
+    num_citations: int
+    timestamp: str
+
+
+class QueryHistoryResponse(BaseModel):
+    session_id: str
+    queries: list[QueryHistoryItem]
 
 
 class HealthResponse(BaseModel):
@@ -106,6 +134,7 @@ async def query_compliance(request: QueryRequest) -> QueryResponse:
     try:
         from src.storage.weaviate_client import WeaviateClient
         from src.generation.citation_engine import CitationEngine
+        from src.storage.session_db import SessionDatabase
         
         with WeaviateClient() as client:
             engine = CitationEngine(client)
@@ -125,12 +154,30 @@ async def query_compliance(request: QueryRequest) -> QueryResponse:
             for c in response.citations
         ]
         
+        # Log query to session database if session_id provided
+        if request.session_id:
+            try:
+                db = SessionDatabase()
+                db.log_query(
+                    session_id=request.session_id,
+                    question=request.question,
+                    answer=response.answer,
+                    regulation_filter=request.regulation if request.regulation != "All" else None,
+                    num_citations=len(response.citations),
+                    has_context=response.has_context,
+                    metadata=response.metadata
+                )
+            except Exception as e:
+                # Don't fail the query if logging fails
+                logging.warning(f"Failed to log query: {e}")
+        
         return QueryResponse(
             answer=response.answer,
             citations=citations,
             has_context=response.has_context,
             provider=response.metadata.get("provider", "groq"),
-            model=response.metadata.get("model", "llama-3.3-70b")
+            model=response.metadata.get("model", "llama-3.3-70b"),
+            session_id=request.session_id
         )
         
     except Exception as e:
@@ -148,6 +195,63 @@ async def get_regulations():
             {"id": "PCI-DSS", "name": "PCI-DSS", "icon": "💳"},
         ]
     }
+
+
+@app.post("/api/sessions")
+async def create_session(request: SessionCreateRequest) -> SessionResponse:
+    """Create a new user session."""
+    try:
+        from src.storage.session_db import SessionDatabase
+        
+        db = SessionDatabase()
+        session = db.create_session(metadata=request.metadata)
+        
+        return SessionResponse(
+            session_id=session.session_id,
+            created_at=session.created_at,
+            last_activity=session.last_activity,
+            metadata=session.metadata
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/sessions/{session_id}/history")
+async def get_session_history(session_id: str, limit: int = 50) -> QueryHistoryResponse:
+    """Get query history for a session."""
+    try:
+        from src.storage.session_db import SessionDatabase
+        
+        db = SessionDatabase()
+        
+        # Verify session exists
+        session = db.get_session(session_id)
+        if not session:
+            raise HTTPException(status_code=404, detail="Session not found")
+        
+        # Get query history
+        history = db.get_session_history(session_id, limit=limit)
+        
+        queries = [
+            QueryHistoryItem(
+                query_id=record.query_id,
+                question=record.question,
+                answer=record.answer,
+                regulation_filter=record.regulation_filter,
+                num_citations=record.num_citations,
+                timestamp=record.timestamp
+            )
+            for record in history
+        ]
+        
+        return QueryHistoryResponse(
+            session_id=session_id,
+            queries=queries
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # Mount static files
