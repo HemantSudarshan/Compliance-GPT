@@ -259,3 +259,41 @@ jobs:
         with:
           name: load-test-report
           path: load-test-report.html
+
+  # ==========================================================================
+  # Deploy to Hugging Face Spaces (Main Branch Only)
+  # ==========================================================================
+  deploy-huggingface:
+    name: Deploy to Hugging Face Spaces
+    runs-on: ubuntu-latest
+    needs: [test, security]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+      
+      - name: Configure Git
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions Bot"
+      
+      - name: Push to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          # Add HF remote (ignore if exists)
+          git remote add space https://HemantSudarshan:$HF_TOKEN@huggingface.co/spaces/Hemantxai/compliance-gpt 2>/dev/null || true
+          
+          # Push to main branch
+          git push space main --force
+      
+      - name: Deployment Summary
+        run: |
+          echo "✅ Successfully deployed to Hugging Face Spaces"
+          echo "🔗 View at: https://huggingface.co/spaces/Hemantxai/compliance-gpt"
+          echo "📦 Commit: ${{ github.sha }}"
+          echo "📅 Time: $(date -u +%Y-%m-%dT%H:%M:%SZ)"

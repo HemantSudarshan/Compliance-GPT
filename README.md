@@ -11,6 +11,7 @@ pinned: false
 ### Enterprise-Grade AI Compliance Assistant with Zero-Hallucination Citations
 
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://python.org)
+[![CI/CD](https://github.com/HemantSudarshan/Compliance-GPT/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/HemantSudarshan/Compliance-GPT/actions/workflows/ci-cd.yml)
 [![FastAPI](https://img.shields.io/badge/FastAPI-2.1-009688.svg)](https://fastapi.tiangolo.com/)
 [![Weaviate](https://img.shields.io/badge/Weaviate-Vector%20DB-00C9A7)](https://weaviate.io)
 [![Security](https://img.shields.io/badge/Security-A+-green.svg)](SECURITY.md)
