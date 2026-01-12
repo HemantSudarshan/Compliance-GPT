@@ -32,13 +32,13 @@ class Counter:
     
     def inc(self, value: float = 1, **labels):
         """Increment the counter."""
-        key = tuple(labels.get(l, "") for l in self.label_names)
+        key = tuple(labels.get(label_name, "") for label_name in self.label_names)
         with self._lock:
             self._values[key] += value
     
     def get(self, **labels) -> float:
         """Get current counter value."""
-        key = tuple(labels.get(l, "") for l in self.label_names)
+        key = tuple(labels.get(label_name, "") for label_name in self.label_names)
         return self._values.get(key, 0.0)
     
     def collect(self) -> list[dict]:
@@ -62,13 +62,13 @@ class Gauge:
     
     def set(self, value: float, **labels):
         """Set the gauge value."""
-        key = tuple(labels.get(l, "") for l in self.label_names)
+        key = tuple(labels.get(label_name, "") for label_name in self.label_names)
         with self._lock:
             self._values[key] = value
     
     def inc(self, value: float = 1, **labels):
         """Increment the gauge."""
-        key = tuple(labels.get(l, "") for l in self.label_names)
+        key = tuple(labels.get(label_name, "") for label_name in self.label_names)
         with self._lock:
             self._values[key] = self._values.get(key, 0) + value
     
@@ -78,7 +78,7 @@ class Gauge:
     
     def get(self, **labels) -> float:
         """Get current gauge value."""
-        key = tuple(labels.get(l, "") for l in self.label_names)
+        key = tuple(labels.get(label_name, "") for label_name in self.label_names)
         return self._values.get(key, 0.0)
     
     def collect(self) -> list[dict]:
@@ -106,7 +106,7 @@ class Histogram:
     
     def observe(self, value: float, **labels):
         """Record an observation."""
-        key = tuple(labels.get(l, "") for l in self.label_names)
+        key = tuple(labels.get(label_name, "") for label_name in self.label_names)
         with self._lock:
             self._sums[key] += value
             for bucket in self.buckets:

@@ -15,7 +15,7 @@ try:
     from src.utils.logger import setup_logger
     from src.utils.config import config
     from src.storage.weaviate_client import WeaviateClient, COLLECTION_NAME
-    from src.ingestion.chunker import Chunk
+    from src.ingestion.chunker import Chunk  # noqa: F401
     logger = setup_logger(__name__)
 except ImportError:
     logging.basicConfig(level=logging.INFO)

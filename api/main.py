@@ -35,7 +35,7 @@ app = FastAPI(
 )
 
 # Import and add middleware
-from api.middleware import (
+from api.middleware import (  # noqa: E402
     RateLimitMiddleware,
     ErrorHandlingMiddleware,
     RequestLoggingMiddleware,
@@ -61,11 +61,11 @@ app.add_middleware(
 )
 
 # Include admin router (for multi-tenancy management)
-from api.admin import router as admin_router
+from api.admin import router as admin_router  # noqa: E402
 app.include_router(admin_router)
 
 # Set up health check routes
-from api.health import setup_health_routes
+from api.health import setup_health_routes  # noqa: E402
 setup_health_routes(app, version="2.1.0")
 
 

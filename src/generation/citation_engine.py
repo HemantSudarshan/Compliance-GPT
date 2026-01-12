@@ -27,9 +27,9 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Import from storage
-from src.storage.weaviate_client import WeaviateClient
-from src.storage.retriever import HybridRetriever
-from src.generation.prompts import (
+from src.storage.weaviate_client import WeaviateClient  # noqa: E402
+from src.storage.retriever import HybridRetriever  # noqa: E402
+from src.generation.prompts import (  # noqa: E402
     get_system_prompt,
     format_query_prompt,
     get_no_context_response
