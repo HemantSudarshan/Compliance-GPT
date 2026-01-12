@@ -286,7 +286,7 @@ jobs:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           # Add HF remote with token-based authentication (ignore if exists)
-          git remote add space https://HF_TOKEN:$HF_TOKEN@huggingface.co/spaces/Hemantxai/compliance-gpt 2>/dev/null || true
+          git remote add space https://$HF_TOKEN@huggingface.co/spaces/Hemantxai/compliance-gpt 2>/dev/null || true
           
           # Push to main branch
           git push space main --force
