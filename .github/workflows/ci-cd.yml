@@ -285,15 +285,17 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          # Configure git to use token authentication
-          git config --global credential.helper store
-          echo "https://Hemantxai:${HF_TOKEN}@huggingface.co" > ~/.git-credentials
-          
-          # Add HF remote (ignore if exists)
-          git remote add space https://huggingface.co/spaces/Hemantxai/compliance-gpt 2>/dev/null || true
-          
-          # Push to main branch
-          git push space main --force
+          pip install huggingface_hub
+          python -c "
+          from huggingface_hub import HfApi
+          api = HfApi()
+          api.upload_folder(
+              folder_path='.',
+              repo_id='Hemantxai/compliance-gpt',
+              repo_type='space',
+              token='${{ secrets.HF_TOKEN }}'
+          )
+          "
       
       - name: Deployment Summary
         run: |
