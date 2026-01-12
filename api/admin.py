@@ -12,7 +12,7 @@ from typing import Optional
 import os
 
 from .tenants import (
-    TenantManager, TenantTier, TenantStatus,
+    TenantTier, TenantStatus,
     get_tenant_manager, is_multi_tenant_enabled
 )
 from .metrics import metrics

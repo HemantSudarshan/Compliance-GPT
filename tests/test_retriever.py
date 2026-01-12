@@ -8,8 +8,7 @@ import pytest
 import sys
 from pathlib import Path
 from dataclasses import dataclass, field
-from typing import Optional
-from unittest.mock import Mock, MagicMock, patch
+from unittest.mock import Mock
 
 # Add project root to path
 project_root = Path(__file__).parent.parent

@@ -48,7 +48,7 @@ def run_ingestion(
     chunks_file = output_dir / f"{regulation_name.lower()}_chunks.json"
     
     print("=" * 60)
-    print(f"ComplianceGPT - Ingestion Pipeline")
+    print("ComplianceGPT - Ingestion Pipeline")
     print(f"Regulation: {regulation_name}")
     print(f"Source: {pdf_path}")
     print("=" * 60)
@@ -60,7 +60,7 @@ def run_ingestion(
             parsed_data = json.load(f)
         elements_count = parsed_data.get("total_elements", 0)
     else:
-        print(f"\n📄 Step 1: Parsing PDF...")
+        print("\n📄 Step 1: Parsing PDF...")
         elements = parse_regulation_pdf(pdf_path, parsed_file, strategy="hi_res")
         elements_count = len(elements)
         print(f"   ✅ Extracted {elements_count} elements")
@@ -72,7 +72,7 @@ def run_ingestion(
             chunks_data = json.load(f)
         chunks = chunks_data.get("chunks", [])
     else:
-        print(f"\n📦 Step 2: Chunking elements...")
+        print("\n📦 Step 2: Chunking elements...")
         
         # Load parsed elements
         with open(parsed_file, 'r', encoding='utf-8') as f:
@@ -109,9 +109,9 @@ def run_ingestion(
     
     # Step 3: Index to Weaviate
     if skip_indexing:
-        print(f"\n🔍 Skipping indexing (--skip-indexing flag)")
+        print("\n🔍 Skipping indexing (--skip-indexing flag)")
     else:
-        print(f"\n🔍 Step 3: Indexing to Weaviate...")
+        print("\n🔍 Step 3: Indexing to Weaviate...")
         
         try:
             with WeaviateClient() as client:

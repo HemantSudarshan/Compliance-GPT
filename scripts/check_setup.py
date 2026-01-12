@@ -95,24 +95,24 @@ def check_llm_connection() -> tuple[bool, str]:
         if provider == "groq":
             from groq import Groq
             client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-            response = client.chat.completions.create(
+            client.chat.completions.create(
                 model="llama-3.3-70b-versatile",
                 messages=[{"role": "user", "content": "Say 'OK'"}],
                 max_tokens=5
             )
-            return True, f"Groq API working"
+            return True, "Groq API working"
             
         elif provider == "gemini":
             import google.generativeai as genai
             genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
             model = genai.GenerativeModel("gemini-1.5-flash")
-            response = model.generate_content("Say 'OK'")
+            model.generate_content("Say 'OK'")
             return True, "Gemini API working"
             
         elif provider == "openai":
             from openai import OpenAI
             client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-            response = client.chat.completions.create(
+            client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[{"role": "user", "content": "Say 'OK'"}],
                 max_tokens=5
@@ -209,7 +209,7 @@ def run_checks():
         if not llm_connected:
             all_passed = False
     else:
-        print(f"  ⏭️ LLM API: Skipped (config missing)")
+        print("  ⏭️ LLM API: Skipped (config missing)")
     
     weaviate_ok, _ = check_weaviate()
     if weaviate_ok:
@@ -218,7 +218,7 @@ def run_checks():
         if not wv_connected:
             all_passed = False
     else:
-        print(f"  ⏭️ Weaviate: Skipped (config missing)")
+        print("  ⏭️ Weaviate: Skipped (config missing)")
     
     # Summary
     print("\n" + "=" * 60)

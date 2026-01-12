@@ -7,7 +7,7 @@ Evaluates RAG quality using Faithfulness, Answer Relevance, and Context Precisio
 import json
 import logging
 from pathlib import Path
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Optional
 
 # Flexible imports

@@ -32,7 +32,7 @@ def setup_weaviate(force_recreate: bool = False):
     
     # Check environment variables
     weaviate_url = os.getenv("WEAVIATE_URL")
-    weaviate_key = os.getenv("WEAVIATE_API_KEY")
+    os.getenv("WEAVIATE_API_KEY")
     openai_key = os.getenv("OPENAI_API_KEY")
     
     if not weaviate_url:
@@ -76,7 +76,7 @@ def setup_weaviate(force_recreate: bool = False):
             
             # Final status
             final_health = client.health_check()
-            print(f"\n📊 Final Status:")
+            print("\n📊 Final Status:")
             print(f"   - Collection exists: {final_health.get('collection_exists', False)}")
             print(f"   - Object count: {final_health.get('object_count', 0)}")
             

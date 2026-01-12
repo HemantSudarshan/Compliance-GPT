@@ -27,7 +27,6 @@ except ImportError:
 import weaviate
 from weaviate.classes.init import Auth
 from weaviate.classes.config import Configure, Property, DataType
-from weaviate.classes.query import Filter
 
 
 # Schema definition for ComplianceGPT
@@ -253,7 +252,6 @@ def get_weaviate_client(
 
 if __name__ == "__main__":
     # Test connection
-    import os
     from dotenv import load_dotenv
     
     load_dotenv()

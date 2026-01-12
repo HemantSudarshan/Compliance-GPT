@@ -336,7 +336,6 @@ async def otlp_exporter(endpoint: str):
 def setup_tracing(app, service_name: str = "compliancegpt"):
     """Set up tracing for a FastAPI application."""
     from fastapi import Request
-    from starlette.middleware.base import BaseHTTPMiddleware
     
     tracer = get_tracer()
     tracer.service_name = service_name

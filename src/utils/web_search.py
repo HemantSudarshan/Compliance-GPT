@@ -5,7 +5,6 @@ Provides curated web search with compliance-specific sources.
 """
 
 import logging
-from typing import Optional
 from dataclasses import dataclass
 
 logging.basicConfig(level=logging.INFO)

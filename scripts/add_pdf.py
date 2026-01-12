@@ -71,7 +71,7 @@ def index_to_weaviate(chunks: list[dict], regulation_name: str):
     if not url:
         raise ValueError("WEAVIATE_URL not set in .env")
     
-    print(f"📡 Connecting to Weaviate...")
+    print("📡 Connecting to Weaviate...")
     client = weaviate.connect_to_weaviate_cloud(
         cluster_url=url,
         auth_credentials=Auth.api_key(key) if key else None

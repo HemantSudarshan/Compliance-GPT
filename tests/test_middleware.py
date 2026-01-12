@@ -6,9 +6,7 @@ Tests for rate limiting, caching, and authentication middleware.
 
 import pytest
 import time
-from unittest.mock import Mock, AsyncMock, MagicMock, patch
-from fastapi import Request
-from starlette.responses import Response
+from unittest.mock import Mock
 
 
 class TestResponseCache:

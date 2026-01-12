@@ -27,7 +27,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Import from storage
-from src.storage.retriever import HybridRetriever, RetrievalResult
+from src.storage.weaviate_client import WeaviateClient
+from src.storage.retriever import HybridRetriever
 from src.generation.prompts import (
     get_system_prompt,
     format_query_prompt,

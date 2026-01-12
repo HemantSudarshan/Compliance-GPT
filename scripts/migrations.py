@@ -5,13 +5,12 @@ Simple migration system for Weaviate schema and data migrations.
 Supports versioned migrations with up/down operations.
 """
 
-import os
 import json
 import hashlib
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional, Callable
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from enum import Enum
 
 

@@ -6,8 +6,6 @@ Run with: locust -f tests/load/locustfile.py --host http://localhost:8000
 
 from locust import HttpUser, task, between, events
 import random
-import json
-import time
 
 
 # Sample questions for load testing
