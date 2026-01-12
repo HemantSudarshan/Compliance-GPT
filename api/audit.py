@@ -9,7 +9,7 @@ import logging
 import hashlib
 import os
 from datetime import datetime, timezone
-from typing import Optional, Any
+from typing import Optional
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 from enum import Enum
@@ -191,8 +191,9 @@ class AuditLogger:
         # Queue for async writing
         try:
             self._queue.put_nowait(event)
-        except:
+        except Exception as e:
             # Queue full - log synchronously as fallback
+            self._logger.warning(f"Queue full, writing synchronously: {e}")
             self._write_event(event)
         
         return event.event_id
@@ -203,7 +204,7 @@ class AuditLogger:
             try:
                 event = self._queue.get(timeout=1)
                 self._write_event(event)
-            except:
+            except Exception:
                 continue
     
     def _write_event(self, event: AuditEvent):
@@ -285,7 +286,7 @@ class AuditLogger:
                                 continue
                             
                             results.append(event)
-                        except:
+                        except Exception:
                             continue
             
             current = current.replace(day=current.day + 1)
@@ -301,7 +302,7 @@ class AuditLogger:
             try:
                 event = self._queue.get_nowait()
                 self._write_event(event)
-            except:
+            except Exception:
                 break
 
 
