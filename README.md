@@ -276,7 +276,81 @@ Compares two versions, highlights:
 
 ---
 
+## 🏢 Enterprise Features
+
+ComplianceGPT includes production-ready enterprise capabilities for large-scale deployments:
+
+### 🔐 Security & Compliance
+| Feature | Description |
+|---------|-------------|
+| **API Key Authentication** | Per-tenant API keys with rotation |
+| **Rate Limiting** | Configurable limits per IP/tenant |
+| **Audit Logging** | Complete audit trail with retention policies |
+| **Input Validation** | Pydantic schemas, query length limits |
+
+### 📊 Observability
+| Feature | Description |
+|---------|-------------|
+| **Prometheus Metrics** | `/metrics` endpoint for Grafana |
+| **Distributed Tracing** | OpenTelemetry-compatible tracing |
+| **Health Checks** | `/health`, `/health/ready`, `/health/live` |
+| **Structured Logging** | JSON logs for log aggregation |
+
+### 🚀 Scalability
+| Feature | Description |
+|---------|-------------|
+| **Multi-Tenancy** | Tenant isolation with quotas |
+| **Response Caching** | TTL-based caching layer |
+| **Kubernetes Ready** | Full K8s manifests with HPA |
+| **Load Tested** | Locust scripts for capacity planning |
+
+### 🔄 DevOps
+| Feature | Description |
+|---------|-------------|
+| **CI/CD Pipeline** | GitHub Actions with staging/prod |
+| **Docker Support** | Multi-stage builds, optimized images |
+| **Database Migrations** | Version-controlled schema changes |
+| **Operations Runbook** | Incident response procedures |
+
+### Quick Setup for Enterprise
+```bash
+# Enable multi-tenancy
+export ENABLE_MULTI_TENANCY=true
+export ADMIN_API_TOKEN=$(openssl rand -hex 32)
+
+# Enable observability
+export ENABLE_TRACING=true
+export ENABLE_METRICS=true
+export ENABLE_AUDIT=true
+
+# Run with enterprise features
+uvicorn api.main:app --host 0.0.0.0 --port 8000
+```
+
+### Admin API Endpoints
+```bash
+# Create tenant
+curl -X POST http://localhost:8000/admin/tenants \
+  -H "Authorization: Bearer $ADMIN_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Acme Corp", "email": "admin@acme.com", "tier": "pro"}'
+
+# Generate API key for tenant
+curl -X POST http://localhost:8000/admin/tenants/{tenant_id}/api-keys \
+  -H "Authorization: Bearer $ADMIN_API_TOKEN"
+
+# View system stats
+curl http://localhost:8000/admin/system/stats \
+  -H "Authorization: Bearer $ADMIN_API_TOKEN"
+```
+
+📖 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for detailed architecture diagrams.
+📖 See [docs/RUNBOOK.md](docs/RUNBOOK.md) for operations procedures.
+
+---
+
 ## 🤝 Contributing
+
 
 We welcome contributions! Areas for improvement:
 
