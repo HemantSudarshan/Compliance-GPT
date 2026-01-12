@@ -61,8 +61,8 @@ class HybridRetriever:
     def __init__(
         self,
         weaviate_client: "WeaviateClient",
-        top_k: int = None,
-        alpha: float = None
+        top_k: Optional[int] = None,
+        alpha: Optional[float] = None
     ):
         """
         Initialize the retriever.

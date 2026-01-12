@@ -110,8 +110,8 @@ class RAGASEvaluator:
     
     def __init__(
         self,
-        provider: str = None,
-        api_key: str = None
+        provider: Optional[str] = None,
+        api_key: Optional[str] = None
     ):
         """
         Initialize the evaluator.

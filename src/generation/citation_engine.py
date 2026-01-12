@@ -204,9 +204,9 @@ class GroqProvider(BaseLLMProvider):
 
 
 def get_llm_provider(
-    provider: str = None,
-    api_key: str = None,
-    model: str = None
+    provider: Optional[str] = None,
+    api_key: Optional[str] = None,
+    model: Optional[str] = None
 ) -> BaseLLMProvider:
     """
     Factory function to get the appropriate LLM provider.
@@ -254,11 +254,11 @@ class CitationEngine:
     def __init__(
         self,
         weaviate_client: "WeaviateClient",
-        provider: str = None,
-        api_key: str = None,
-        model: str = None,
-        top_k: int = None,
-        alpha: float = None
+        provider: Optional[str] = None,
+        api_key: Optional[str] = None,
+        model: Optional[str] = None,
+        top_k: Optional[int] = None,
+        alpha: Optional[float] = None
     ):
         """
         Initialize the citation engine.
@@ -392,8 +392,8 @@ class CitationEngine:
 def answer_compliance_question(
     question: str,
     regulation: Optional[str] = None,
-    provider: str = None,
-    api_key: str = None,
+    provider: Optional[str] = None,
+    api_key: Optional[str] = None,
     weaviate_url: Optional[str] = None,
     weaviate_api_key: Optional[str] = None
 ) -> CitedResponse:

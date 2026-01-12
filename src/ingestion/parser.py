@@ -57,7 +57,7 @@ class PDFParser:
     def __init__(
         self,
         strategy: str = "hi_res",
-        languages: list[str] = None,
+        languages: Optional[list[str]] = None,
         extract_images: bool = False
     ):
         """

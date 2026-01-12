@@ -199,13 +199,22 @@ class TestCacheEndpoint:
     
     @pytest.fixture
     def client(self):
-        """Create test client."""
-        from api.main import app
-        return TestClient(app)
+        """Create test client with admin token configured."""
+        # Set env before importing app
+        with patch.dict('os.environ', {
+            'ADMIN_API_TOKEN': 'test-admin-token',
+            'WEAVIATE_URL': 'http://test:8080',
+            'LLM_PROVIDER': 'groq'
+        }):
+            from api.main import app
+            yield TestClient(app)
     
     def test_clear_cache_succeeds(self, client):
-        """Test cache clear endpoint works."""
-        response = client.delete("/api/cache")
+        """Test cache clear endpoint works with admin authentication."""
+        response = client.delete(
+            "/api/cache",
+            headers={"X-Admin-Token": "test-admin-token"}
+        )
         
         assert response.status_code == 200
         data = response.json()

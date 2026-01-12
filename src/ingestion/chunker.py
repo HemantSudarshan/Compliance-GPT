@@ -76,8 +76,8 @@ class SemanticChunker:
     
     def __init__(
         self,
-        chunk_size: int = None,
-        chunk_overlap: int = None,
+        chunk_size: Optional[int] = None,
+        chunk_overlap: Optional[int] = None,
         model: str = "cl100k_base"  # GPT-4/3.5 tokenizer
     ):
         """
@@ -284,8 +284,8 @@ class SemanticChunker:
 def chunk_parsed_elements(
     elements: list[ParsedElement],
     regulation_name: str = "regulation",
-    chunk_size: int = None,
-    chunk_overlap: int = None
+    chunk_size: Optional[int] = None,
+    chunk_overlap: Optional[int] = None
 ) -> list[Chunk]:
     """
     Convenience function to chunk parsed elements.
