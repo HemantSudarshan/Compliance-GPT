@@ -12,6 +12,8 @@ pinned: false
 
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://python.org)
 [![CI/CD](https://github.com/HemantSudarshan/Compliance-GPT/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/HemantSudarshan/Compliance-GPT/actions/workflows/ci-cd.yml)
+[![Tests](https://img.shields.io/badge/tests-80%20passed-success)](https://github.com/HemantSudarshan/Compliance-GPT/actions)
+[![Type Checked](https://img.shields.io/badge/mypy-type%20checked-blue)](https://github.com/python/mypy)
 [![FastAPI](https://img.shields.io/badge/FastAPI-2.1-009688.svg)](https://fastapi.tiangolo.com/)
 [![Weaviate](https://img.shields.io/badge/Weaviate-Vector%20DB-00C9A7)](https://weaviate.io)
 [![Security](https://img.shields.io/badge/Security-A+-green.svg)](SECURITY.md)
@@ -289,15 +291,22 @@ Benchmark: Intel i7-9700K, 16GB RAM, Weaviate Cloud (free tier)
 ## 🧪 Testing
 
 ```bash
-# Run unit tests
-pytest tests/
+# Run all tests (80 tests)
+pytest tests/ -v --cov=src --cov-report=html
 
-# Run security tests
-pytest tests/test_middleware.py -v
+# Run type checking
+mypy src/ --ignore-missing-imports
+
+# Run specific test suites
+pytest tests/test_api.py -v              # API tests
+pytest tests/test_middleware.py -v       # Security tests
+pytest tests/test_citation.py -v         # Citation engine tests
 
 # Run load tests (requires locust)
 locust -f tests/load/locustfile.py --host=http://localhost:8000
 ```
+
+**Test Coverage:** 80 tests covering API endpoints, middleware, citation engine, retrieval, parsing, and security features.
 
 ---
 
@@ -413,6 +422,9 @@ MIT License - see [LICENSE](LICENSE) for details.
 - [x] Security hardening (v2.1)
 - [x] Docker deployment
 - [x] Audit logging
+- [x] **CI/CD Pipeline** (GitHub Actions → HuggingFace Spaces)
+- [x] **Type Safety** (mypy strict type checking)
+- [x] **Test Suite** (80 tests with coverage reporting)
 
 ### 🚧 In Progress
 - [ ] PostgreSQL for persistent audit logs
