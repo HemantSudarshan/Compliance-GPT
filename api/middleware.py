@@ -7,7 +7,7 @@ Provides rate limiting, authentication, and error handling middleware.
 import time
 import os
 import hashlib
-from typing import Optional, Callable
+from typing import Optional, Callable, Any
 from collections import defaultdict
 from fastapi import Request, HTTPException, status
 from fastapi.responses import JSONResponse
@@ -89,20 +89,30 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
     
     def _is_allowed(self, client_ip: str) -> bool:
         """Check if the client is within rate limits."""
-        now = time.time()
-        window_start = now - 60  # 1 minute window
-        
-        # Count requests in the current window
-        recent_requests = [
-            ts for ts in self.request_counts[client_ip]
-            if ts > window_start
-        ]
-        
+        recent_requests = self._prune_client_requests(client_ip)
         return len(recent_requests) < self.requests_per_minute
     
     def _record_request(self, client_ip: str):
         """Record a request timestamp."""
-        self.request_counts[client_ip].append(time.time())
+        now = time.time()
+        recent_requests = self._prune_client_requests(client_ip, now=now)
+        recent_requests.append(now)
+        self.request_counts[client_ip] = recent_requests
+
+    def _prune_client_requests(
+        self,
+        client_ip: str,
+        now: Optional[float] = None
+    ) -> list[float]:
+        """Keep only timestamps inside the active 60-second window for one client."""
+        now = now or time.time()
+        window_start = now - 60
+        recent_requests = [
+            ts for ts in self.request_counts[client_ip]
+            if ts > window_start
+        ]
+        self.request_counts[client_ip] = recent_requests
+        return recent_requests
     
     def _cleanup_old_records(self):
         """Remove old request records to prevent memory bloat."""
@@ -111,13 +121,8 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         if now - self.last_cleanup < self.cleanup_interval:
             return
         
-        window_start = now - 60
-        
         for client_ip in list(self.request_counts.keys()):
-            self.request_counts[client_ip] = [
-                ts for ts in self.request_counts[client_ip]
-                if ts > window_start
-            ]
+            self._prune_client_requests(client_ip, now=now)
             
             # Remove empty entries
             if not self.request_counts[client_ip]:
@@ -322,9 +327,9 @@ class ResponseCache:
     def __init__(self, ttl_seconds: int = 300, max_entries: int = 1000):
         self.ttl = ttl_seconds
         self.max_entries = max_entries
-        self.cache: dict[str, tuple[any, float]] = {}
+        self.cache: dict[str, tuple[Any, float]] = {}
     
-    def get(self, key: str) -> Optional[any]:
+    def get(self, key: str) -> Optional[Any]:
         """Get a cached value if not expired."""
         if key not in self.cache:
             return None
@@ -337,7 +342,7 @@ class ResponseCache:
         
         return value
     
-    def set(self, key: str, value: any):
+    def set(self, key: str, value: Any):
         """Cache a value with current timestamp."""
         # Cleanup if cache is full
         if len(self.cache) >= self.max_entries:
@@ -368,7 +373,11 @@ class ResponseCache:
     @staticmethod
     def make_key(query: str, regulation: str = None) -> str:
         """Generate a cache key from query parameters."""
-        data = f"{query.lower().strip()}:{regulation or 'all'}"
+        normalized_query = " ".join((query or "").casefold().split())
+        normalized_regulation = " ".join((regulation or "all").casefold().split())
+        if normalized_regulation in {"", "all", "all regulations", "*"}:
+            normalized_regulation = "all"
+        data = f"{normalized_query}:{normalized_regulation}"
         return hashlib.md5(data.encode()).hexdigest()
 
 

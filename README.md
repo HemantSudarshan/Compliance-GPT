@@ -440,6 +440,18 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
+## Recent Impactful Changes (2026-02-11)
+
+- Improved API efficiency by pruning stale rate-limit timestamps during each per-client check, reducing memory growth and lookup overhead under traffic spikes.
+- Increased cache hit consistency with normalized cache keys (case-insensitive and whitespace-collapsed query/regulation values, with canonical handling for `all` regulation filters).
+- Reduced import-time coupling so `src.generation` and `src.storage.weaviate_client` can be imported in lightweight/test environments without forcing all optional runtime dependencies at import time.
+
+## Context Checkpoints
+
+- [Checkpoint 2026-02-11](Context/CHECKPOINT_2026-02-11.md)
+
+---
+
 <div align="center">
 
 **⭐ If this project helped you, please star it!**

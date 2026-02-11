@@ -347,3 +347,9 @@ ComplianceGPT/
 ├── requirements.txt
 └── README.md
 ```
+
+## Recent Efficiency Updates (2026-02-11)
+
+- Rate limiting now prunes stale request timestamps per client during each check, reducing per-IP memory growth and lookup cost.
+- Response cache keys now normalize query/regulation casing and whitespace for higher cache-hit consistency.
+- Generation and storage modules now avoid hard import failures in lightweight environments when optional runtime dependencies are not installed.

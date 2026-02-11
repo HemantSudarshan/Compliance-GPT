@@ -24,18 +24,25 @@ except ImportError:
         openai_api_key: str = ""
         embedding_model: str = "text-embedding-3-large"
 
-import weaviate
-from weaviate.classes.init import Auth
-from weaviate.classes.config import Configure, Property, DataType
+WEAVIATE_IMPORT_ERROR: Optional[Exception] = None
+try:
+    import weaviate
+    from weaviate.classes.init import Auth
+    from weaviate.classes.config import Configure, Property, DataType
+except ModuleNotFoundError as exc:
+    weaviate = None  # type: ignore[assignment]
+    Auth = None  # type: ignore[assignment]
+    Configure = None  # type: ignore[assignment]
+    Property = None  # type: ignore[assignment]
+    DataType = None  # type: ignore[assignment]
+    WEAVIATE_IMPORT_ERROR = exc
 
 
-# Schema definition for ComplianceGPT
-COLLECTION_NAME = "ComplianceChunk"
-
-COLLECTION_SCHEMA = {
-    "name": COLLECTION_NAME,
-    "description": "Regulatory document chunks for compliance Q&A",
-    "properties": [
+def _build_collection_properties() -> list:
+    """Build schema properties when Weaviate config classes are available."""
+    if Property is None or DataType is None:
+        return []
+    return [
         Property(name="chunk_id", data_type=DataType.TEXT, description="Unique chunk identifier"),
         Property(name="text", data_type=DataType.TEXT, description="Chunk text content"),
         Property(name="source_file", data_type=DataType.TEXT, description="Source PDF filename"),
@@ -44,7 +51,16 @@ COLLECTION_SCHEMA = {
         Property(name="token_count", data_type=DataType.INT, description="Token count"),
         Property(name="regulation", data_type=DataType.TEXT, description="Regulation name (GDPR, CCPA, etc.)"),
         Property(name="chunk_index", data_type=DataType.INT, description="Chunk index within regulation"),
-    ],
+    ]
+
+
+# Schema definition for ComplianceGPT
+COLLECTION_NAME = "ComplianceChunk"
+
+COLLECTION_SCHEMA = {
+    "name": COLLECTION_NAME,
+    "description": "Regulatory document chunks for compliance Q&A",
+    "properties": _build_collection_properties(),
 }
 
 
@@ -97,6 +113,12 @@ class WeaviateClient:
         Returns:
             Self for method chaining
         """
+        if weaviate is None:
+            raise ModuleNotFoundError(
+                "weaviate-client is required to connect to Weaviate. "
+                "Install dependencies from requirements.txt."
+            ) from WEAVIATE_IMPORT_ERROR
+
         if not self.url:
             raise ValueError("Weaviate URL not configured. Set WEAVIATE_URL in .env")
         
@@ -155,6 +177,11 @@ class WeaviateClient:
         Returns:
             True if collection was created, False if already exists
         """
+        if Configure is None:
+            raise ModuleNotFoundError(
+                "weaviate-client is required to create collections."
+            ) from WEAVIATE_IMPORT_ERROR
+
         collection_name = COLLECTION_NAME
         
         # Check if collection exists

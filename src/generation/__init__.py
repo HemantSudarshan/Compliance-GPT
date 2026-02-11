@@ -13,12 +13,6 @@ from src.generation.prompts import (
     format_comparison_prompt,
     get_no_context_response
 )
-from src.generation.citation_engine import (
-    CitationEngine,
-    Citation,
-    CitedResponse,
-    answer_compliance_question
-)
 
 __all__ = [
     # Prompts
@@ -29,9 +23,24 @@ __all__ = [
     "format_query_prompt",
     "format_comparison_prompt",
     "get_no_context_response",
-    # Citation Engine
-    "CitationEngine",
-    "Citation",
-    "CitedResponse",
-    "answer_compliance_question",
 ]
+
+# Import heavy runtime components only when optional dependencies are available.
+# This keeps lightweight modules (for example prompt utilities and unit tests)
+# importable without Weaviate/LLM client packages installed.
+try:
+    from src.generation.citation_engine import (
+        CitationEngine,
+        Citation,
+        CitedResponse,
+        answer_compliance_question
+    )
+except ModuleNotFoundError:
+    pass
+else:
+    __all__ += [
+        "CitationEngine",
+        "Citation",
+        "CitedResponse",
+        "answer_compliance_question",
+    ]

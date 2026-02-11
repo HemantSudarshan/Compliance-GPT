@@ -82,6 +82,18 @@ class TestResponseCache:
         key2 = ResponseCache.make_key("what is gdpr?")
         
         assert key1 == key2
+
+    def test_cache_key_normalizes_whitespace_and_regulation(self):
+        """Test cache key normalization collapses whitespace and regulation variants."""
+        from api.middleware import ResponseCache
+
+        key1 = ResponseCache.make_key("  What   is   GDPR?  ", "GDPR")
+        key2 = ResponseCache.make_key("what is gdpr?", "  gdpr ")
+        key3 = ResponseCache.make_key("what is gdpr?", "All Regulations")
+        key4 = ResponseCache.make_key("what is gdpr?", None)
+
+        assert key1 == key2
+        assert key3 == key4
     
     def test_cache_clear(self):
         """Test cache clear operation."""
@@ -218,6 +230,20 @@ class TestRateLimitMiddleware:
         
         # Old records should be removed
         assert len(middleware.request_counts.get("192.168.1.1", [])) == 0
+
+    def test_is_allowed_prunes_stale_records_for_active_client(self):
+        """Test stale entries are pruned during per-request limit checks."""
+        from api.middleware import RateLimitMiddleware
+
+        middleware = RateLimitMiddleware(Mock(), requests_per_minute=2)
+        client_ip = "192.168.1.9"
+        now = time.time()
+
+        middleware.request_counts[client_ip] = [now - 120, now - 70, now - 10]
+
+        assert middleware._is_allowed(client_ip)
+        assert len(middleware.request_counts[client_ip]) == 1
+        assert middleware.request_counts[client_ip][0] > now - 60
 
 
 class TestAPIKeyMiddleware:
