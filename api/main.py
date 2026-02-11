@@ -96,6 +96,7 @@ class QueryResponse(BaseModel):
     model: str
     cached: bool = False
     response_time_ms: Optional[float] = None
+    verification: Optional[dict] = None
 
 
 class HealthResponse(BaseModel):
@@ -228,7 +229,8 @@ async def query_compliance(request: QueryRequest) -> QueryResponse:
             provider=response.metadata.get("provider", "groq"),
             model=response.metadata.get("model", "llama-3.3-70b"),
             cached=False,
-            response_time_ms=(time.time() - start_time) * 1000
+            response_time_ms=(time.time() - start_time) * 1000,
+            verification=response.verification.to_dict() if response.verification else None
         )
         
         # Cache the response

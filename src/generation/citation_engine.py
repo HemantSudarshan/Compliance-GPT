@@ -90,25 +90,29 @@ class Citation:
 
 @dataclass
 class CitedResponse:
-    """Represents a response with citations."""
+    """Represents a response with citations and verification."""
     
     answer: str
     citations: list[Citation]
     query: str
     has_context: bool
     metadata: dict = field(default_factory=dict)
+    verification: Optional["VerificationReport"] = None  # Forward reference to avoid import
     
     def to_dict(self) -> dict:
-        return {
+        result = {
             "answer": self.answer,
             "citations": [c.to_dict() for c in self.citations],
             "query": self.query,
             "has_context": self.has_context,
-            "metadata": self.metadata
+            "metadata": self.metadata,
         }
+        if self.verification:
+            result["verification"] = self.verification.to_dict()
+        return result
     
     def format_full_response(self) -> str:
-        """Format the complete response with sources section."""
+        """Format the complete response with sources and verification."""
         if not self.citations:
             return self.answer
         
@@ -116,7 +120,12 @@ class CitedResponse:
         for citation in self.citations:
             sources_section += f"\n{citation.format_reference()}"
         
-        return self.answer + sources_section
+        # Add verification summary if available
+        verification_section = ""
+        if self.verification:
+            verification_section = f"\n\n{self.verification.summary()}"
+        
+        return self.answer + sources_section + verification_section
 
 
 # =============================================================================
@@ -324,6 +333,20 @@ class CitationEngine:
         # Step 3: Generate answer
         answer = self._generate_answer(question, context)
         
+        # Step 4: Verify citations
+        verification = None
+        try:
+            from src.generation.citation_verifier import CitationVerifier
+            verifier = CitationVerifier()
+            verification = verifier.verify(answer, citations)
+            logger.info(
+                f"Citation verification: {verification.overall_level} "
+                f"(trust: {verification.trust_score:.0f}%, "
+                f"{verification.verified_count}/{verification.total_claims} verified)"
+            )
+        except Exception as e:
+            logger.warning(f"Citation verification failed (non-blocking): {e}")
+        
         return CitedResponse(
             answer=answer,
             citations=citations,
@@ -334,7 +357,8 @@ class CitationEngine:
                 "model": self.model_name,
                 "num_sources": len(citations),
                 "regulation_filter": regulation_filter
-            }
+            },
+            verification=verification
         )
     
     def _build_context(
